@@ -33,9 +33,12 @@ class Trainer():
         scheduler = torch.optim.lr_scheduler.MultiStepLR(opt, 
                                                          milestones=[100, 150], 
                                                          gamma=0.1)
-        _iter = 0
+        _iter = 0 
 
         begin_time = time()
+
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        model = nn.DataParallel(model).to(device)
 
         for epoch in range(1, args.max_epoch+1):
             scheduler.step()
